@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head><title>City Time</title></head>
+<body>
+    <div class="container">
+        <a href="{% url 'welcome' %}" class="back-btn">← Back to Welcome</a>
+        <h1>City Time</h1>
+
+        <div class="city-selector">
+            <select onchange="location = this.value;">
+                <option value="">Select a city...</option>
+                {% for city in cities %}
+                    <option value="?city={{ city }}" {% if city == selected_city %}selected{% endif %}>
+                        {{ city }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        {% if selected_city %}
+        <div class="time-display">
+            <div class="selected-city">Current time in {{ selected_city }}:</div>
+            <div class="current-time">{{ current_time }}</div>
+        </div>
+        {% else %}
+        <div class="time-display">
+            <p>Please select a city to see the current time.</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
