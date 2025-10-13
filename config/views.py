@@ -10,7 +10,7 @@ def welcome(request):
 def users_list(request):
     users = [
         {"full_name": "Aldiyar Sadykov", "age": 21},
-        {"full_name": "Alexey Mihaylov", "age": 30},
+        {"full_name": "Levi Akerman", "age": 30},
         {"full_name": "Yuji Nishida", "age": 22},
     ]
     return render(request, "users.html", {"users": users})
