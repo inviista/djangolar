@@ -3,8 +3,17 @@ from .models import Restaurant, Category, Option, MenuItem, ItemCategory, ItemOp
 
 @admin.register(Restaurant)
 class RestaurantAdmin(admin.ModelAdmin):
-    list_display = ('name', 'is_active', 'created_at')
-    search_fields = ('name',)
+    list_display = ("name", "is_deleted", "deleted_at")
+    list_filter = ("is_deleted",)
+    search_fields = ("name",)
+    actions = ["restore_items"]
+
+    def get_queryset(self, request):
+        return Restaurant.all_objects.all()
+
+    @admin.action(description="Восстановить выбранные рестораны")
+    def restore_items(self, request, queryset):
+        queryset.update(is_deleted=False, deleted_at=None)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -25,6 +34,15 @@ class ItemOptionInline(admin.TabularInline):
 
 @admin.register(MenuItem)
 class MenuItemAdmin(admin.ModelAdmin):
-    list_display = ('name','restaurant','base_price','is_active','created_at')
-    list_filter = ('restaurant', 'is_active')
+    list_display = ('name', 'restaurant', 'base_price', 'is_active', 'is_deleted', 'deleted_at', 'created_at')
+    list_filter = ('restaurant', 'is_active', 'is_deleted')
+    search_fields = ('name',)
     inlines = [ItemCategoryInline, ItemOptionInline]
+    actions = ["restore_items"]
+
+    def get_queryset(self, request):
+        return MenuItem.all_objects.all()
+
+    @admin.action(description="Восстановить выбранные блюда")
+    def restore_items(self, request, queryset):
+        queryset.update(is_deleted=False, deleted_at=None)

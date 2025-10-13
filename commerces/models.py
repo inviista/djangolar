@@ -3,10 +3,20 @@ from django.core.validators import MinValueValidator
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from decimal import Decimal
+from abstracts.models import AbstractSoftDeletableModel
 
 User = get_user_model()
 
-class Address(models.Model):
+class ActiveManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_deleted=False)
+
+class AllObjectsManager(models.Manager):
+    pass
+
+class Address(AbstractSoftDeletableModel):
+    objects = ActiveManager()
+    all_objects = AllObjectsManager()
     user = models.ForeignKey(User, related_name='addresses', on_delete=models.CASCADE)
     title = models.CharField(max_length=120, blank=True)
     line1 = models.CharField(max_length=255)
@@ -21,7 +31,9 @@ class Address(models.Model):
             return f"{self.title} — {self.line1}"
         return f"{self.line1}, {self.city}"
 
-class PromoCode(models.Model):
+class PromoCode(AbstractSoftDeletableModel):
+    objects = ActiveManager()
+    all_objects = AllObjectsManager()
     code = models.CharField(max_length=50, unique=True)
     description = models.TextField(blank=True)
     percent = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0)], null=True, blank=True)
@@ -43,7 +55,9 @@ class PromoCode(models.Model):
     def __str__(self):
         return self.code
 
-class Order(models.Model):
+class Order(AbstractSoftDeletableModel):
+    objects = ActiveManager()
+    all_objects = AllObjectsManager()
     STATUS_NEW = 'new'
     STATUS_CONFIRMED = 'confirmed'
     STATUS_DELIVERING = 'delivering'
@@ -75,7 +89,9 @@ class Order(models.Model):
     def __str__(self):
         return f"Order #{self.pk} by {self.user}"
 
-class OrderPromo(models.Model):
+class OrderPromo(AbstractSoftDeletableModel):
+    objects = ActiveManager()
+    all_objects = AllObjectsManager()
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     promo = models.ForeignKey(PromoCode, on_delete=models.PROTECT)
     applied_amount = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)], default=0)
@@ -89,7 +105,7 @@ class OrderPromo(models.Model):
     def __str__(self):
         return f"{self.promo.code} on Order {self.order_id}: -{self.applied_amount}"
 
-class OrderItem(models.Model):
+class OrderItem(AbstractSoftDeletableModel):
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
     item_id = models.PositiveIntegerField()
     item_name = models.CharField(max_length=255)
@@ -100,9 +116,8 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.item_name} x{self.quantity} (Order {self.order_id})"
 
-class OrderItemOption(models.Model):
+class OrderItemOption(AbstractSoftDeletableModel):
     order_item = models.ForeignKey(OrderItem, related_name='options', on_delete=models.CASCADE)
-    # snapshot of option
     option_id = models.PositiveIntegerField(null=True, blank=True)
     option_name = models.CharField(max_length=255)
     price_delta = models.DecimalField(max_digits=8, decimal_places=2, validators=[MinValueValidator(0)], default=0)
