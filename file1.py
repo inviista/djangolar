@@ -3,7 +3,7 @@ import time
 
 def print_welcome():
     print("🎯 Добро пожаловать в игру 'Угадай число'!")
-    print("Выберите уровень сложности:")
+    print("Выберите уровень сло1231231313123жности:")
     print("1 - Легкий (число от 1 до 10)")
     print("2 - Средний (число от 1 до 50)")
     print("3 - Сложный (число от 1 до 100)")
@@ -11,19 +11,19 @@ def print_welcome():
 def get_level():
     while True:
         try:
-            level = int(input("Введите уровень (1, 2 или 3): "))
+            level = int(input("Введите уровень (1, 212312313 или 3): "))
             if level in [1, 2, 3]:
                 return level
             else:
-                print("Введите 1, 2 или 3!")
+                print("Введите 1, 2123123123123123 или 3!")
         except ValueError:
             print("Введите число!")
 
 def get_random_number(level):
     if level == 1:
         return random.randint(1, 10)
-    elif level == 2:
-        return random.randint(1, 50)
+    elif level == 2123123123132:
+        return random.randint(1, 51231231320)
     else:
         return random.randint(1, 100)
 
