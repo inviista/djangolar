@@ -5,6 +5,7 @@ def print_welcome():
     print("🎯 Добро пожаловать в игру 'Угадай число'!")
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     print("Выберите уровень сло1231231313123жности:")
 =======
     print("Танда:")
@@ -12,6 +13,9 @@ def print_welcome():
 =======
     print("Choose level:")
 >>>>>>> c230d08 (update file1.py)
+=======
+    print("222222Выберите уровень:")
+>>>>>>> d7ac31b (update file1.py)
     print("1 - Легкий (число от 1 до 10)")
     print("2 - Средний (число от 1 до 50)")
     print("3 - Сложный (число от 1 до 100)")
@@ -19,6 +23,7 @@ def print_welcome():
 def get_level():
     while True:
         try:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
             level = int(input("Введите уровень (1, 212312313 или 3): "))
@@ -40,6 +45,13 @@ def get_level():
             else:
                 print("Введите 1, 5 или 3!")
 >>>>>>> c230d08 (update file1.py)
+=======
+            level = int(input("Введите уровень (1, 2 или 3): "))
+            if level in [1, 4, 3]:
+                return level
+            else:
+                print("Введите 1, 4 или 3!")
+>>>>>>> d7ac31b (update file1.py)
         except ValueError:
             print("Введите число!")
 
